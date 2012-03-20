@@ -6,6 +6,7 @@ This script is used to launch ec2 salt minions
 import os
 import shaker
 
+
 def main():
     """
     The main function

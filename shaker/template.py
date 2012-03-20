@@ -39,7 +39,7 @@ class UserData(object):
         if not os.path.isdir(template_dir):
             os.makedirs(template_dir)
         for filename, template in [(self.cloud_init_name, CLOUD_INIT),
-                                   (self.user_script_name, USER_SCRIPT),]:
+                                   (self.user_script_name, USER_SCRIPT)]:
             path = os.path.join(template_dir, filename)
             if not os.path.isfile(path):
                 with open(path, 'w') as f:

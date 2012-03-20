@@ -36,8 +36,10 @@ class EBSFactory(object):
         self.to_profile = cli.to_profile
         self.config = dict(self.profile)
         self.config['config_dir'] = config_dir
-        (self.config['lsb_distributor'],
-         self.config['lsb_codename']) = shaker.ami.lsb(self.config['ec2_distro'])
+        (lsb_distributor,
+         lsb_codename) = shaker.ami.lsb(self.config['ec2_distro'])
+        self.config['lsb_distributor'] = lsb_distributor
+        self.config['lsb_codename'] = lsb_codename
 
     def process(self):
         if self.to_profile:
@@ -106,7 +108,9 @@ class EBSFactory(object):
             p = int(self.config['ssh_port'])
             port = "-p {0} ".format(p) if p and not p == 22 else ''
             ## change user to 'root' for all non-Ubuntu systems
-            user = self.config['sudouser'] if self.config['sudouser'] and self.config['ssh_import'] else 'ubuntu'
+            user = 'ubuntu'
+            if self.config['sudouser'] and self.config['ssh_import']:
+                user = self.config['sudouser']
             #XXX - TODO: replace public dns with fqdn, where appropriate
             msg2 = "To access: ssh {0}{1}@{2}\n" \
                    "To terminate: shaker-terminate {3}".format(
@@ -133,7 +137,7 @@ class EBSFactory(object):
         outer = email.mime.multipart.MIMEMultipart()
         for content, subtype, filename in [
             (userData.user_script, 'x-shellscript', 'user-script.txt'),
-            (userData.cloud_init, 'cloud-config', 'cloud-config.txt'),]:
+            (userData.cloud_init, 'cloud-config', 'cloud-config.txt')]:
             msg = email.mime.text.MIMEText(content, _subtype=subtype)
             msg.add_header('Content-Disposition',
                            'attachment',

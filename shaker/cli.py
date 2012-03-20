@@ -2,6 +2,7 @@ from shaker.version import __version__
 
 import optparse
 
+
 def parse_cli():
     parser = optparse.OptionParser(
         usage="%prog [options] profile",

@@ -28,17 +28,18 @@ import yaml
 import shaker.log
 LOG = shaker.log.getLogger(__name__)
 
+
 def get_ami(distro, profile):
     """Return an AMI ID matching the distro.
     """
-    y = yaml.load(EBSImages)
+    ebs_images = yaml.load(EBSImages)
     try:
         region = profile['ec2_zone'][:-1]
         architecture = profile.get('ec2_architecture', 'i386')
-        release = y['release'].get(distro) or distro
-        for distro in y['release']:
-            if release in y[distro]:
-                return y[distro][release][region][architecture]
+        release = ebs_images['release'].get(distro) or distro
+        for distro in ebs_images['release']:
+            if release in ebs_images[distro]:
+                return ebs_images[distro][release][region][architecture]
     except KeyError:
         pass
     except IndexError:
@@ -53,18 +54,20 @@ def lsb(distro):
     values will be returned in lower case, e.g. ubuntu, not
     Ubuntu.
     """
-    if distro in ['karmic',
-                  'lucid',
-                  'maverick',
-                  'natty',
-                  'oneiric',
-                  'precise',]:
+    ubuntu = ['karmic',
+              'lucid',
+              'maverick',
+              'natty',
+              'oneiric',
+              'precise']
+
+    if distro in ubuntu:
         return 'ubuntu', distro
-    elif distro in ['squeeze',]:
+    elif distro == 'squeeze':
         return 'debian', distro
     elif distro in ['ubuntu', 'debian']:
-        y = yaml.load(EBSImages)
-        return distro, y['release'][distro]
+        ebs_images = yaml.load(EBSImages)
+        return distro, ebs_images['release'][distro]
     return None, None
 
 

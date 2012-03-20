@@ -9,6 +9,7 @@ LOG_LEVELS = {
     'warning': logging.WARNING,
 }
 
+
 def start_logger(logname, filename, log_level):
     consoleLogger = logging.StreamHandler()
     consoleLogger.setLevel(logging.WARNING)

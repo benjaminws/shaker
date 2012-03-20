@@ -6,6 +6,7 @@ import os
 import sys
 import boto.ec2
 
+
 def terminate_instance(id):
     """Terminate an instance by searching through all the regions.
     """
@@ -26,4 +27,3 @@ if __name__ == '__main__':
             os.path.basename(sys.argv[0]))
     else:
         terminate_instance(sys.argv[1])
-
