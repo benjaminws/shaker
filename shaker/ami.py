@@ -33,17 +33,12 @@ def get_ami(distro, profile):
     """Return an AMI ID matching the distro.
     """
     ebs_images = yaml.load(EBSImages)
-    try:
-        region = profile['ec2_zone'][:-1]
-        architecture = profile.get('ec2_architecture', 'i386')
-        release = ebs_images['release'].get(distro) or distro
-        for distro in ebs_images['release']:
-            if release in ebs_images[distro]:
-                return ebs_images[distro][release][region][architecture]
-    except KeyError:
-        pass
-    except IndexError:
-        pass
+    region = profile.get('ec2_zone')[:-1]
+    architecture = profile.get('ec2_architecture', 'i386')
+    release = ebs_images['release'].get(distro) or distro
+    for distro in ebs_images['release']:
+        if release in ebs_images[distro]:
+            return ebs_images[distro][release][region][architecture]
     return None
 
 
