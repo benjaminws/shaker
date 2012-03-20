@@ -10,7 +10,8 @@ def main():
     """
     The main function
     """
-    s = shaker.EBSFactory()
+    cli, config_dir, profile = shaker.cli.parse_cli()
+    s = shaker.ebs.EBSFactory(cli, config_dir, profile)
     s.process()
 
 if __name__ == '__main__':
